@@ -1,0 +1,33 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
+ */
+class TaskFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph,
+            'priority' => $this->faker->numberBetween(1, 4),
+            'state' => $this->faker->randomElement(['new', 'completed', 'in progress', 'on hold', 'planned', 'cancelled', 'deferred']),
+            'time_estimated' => $this->faker->numberBetween(1, 200),
+            'time_spent' => $this->faker->numberBetween(0, 200),
+            'completed_at' => function (array $attributes) {
+                return $attributes['state'] === 'completed' ? $this->faker->dateTimeBetween('-1 year', 'now') : null;
+            },
+            'project_id' => $this->faker->numberBetween(1, count(Project::all()))
+        ];
+    }
+}

@@ -1,0 +1,52 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: task-it-easy-app
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html
+        depends_on:
+            - mysql
+        networks:
+            - task-it-easy-network
+
+    mysql:
+        image: mysql:8.0
+        container_name: task-it-easy-mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: taskiteasy
+        volumes:
+            - task-it-easy-db:/var/lib/mysql
+        networks:
+            - task-it-easy-network
+        ports:
+            - "3306:3306"
+
+    composer:
+        image: composer:latest
+        container_name: task-it-easy-composer
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        entrypoint: [ "sh", "-c", "composer install" ]
+        depends_on:
+            - app
+
+    node:
+        image: node:18
+        container_name: task-it-easy-node
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        entrypoint: [ "sh", "-c", "npm install" ]
+
+networks:
+    task-it-easy-network:
+        driver: bridge
+
+volumes:
+    task-it-easy-db:
