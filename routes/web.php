@@ -1,15 +1,22 @@
 <?php
 
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\StaticPageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArticleController;
 
-// Static pages
-foreach (StaticPageController::getRoutes() as $name => $view) {
-    Route::get("/{$name}", fn() => view($view))->name($name);
-}
+
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 
 // Blog routing
-foreach (PostController::getRoutes() as $postRoute) {
-    Route::{$postRoute['method']}($postRoute['uri'], [PostController::class, $postRoute['action']])->name($postRoute['name']);
+foreach (ArticleController::getRoutes() as $postRoute) {
+    Route::{$postRoute['method']}($postRoute['uri'], [ArticleController::class, $postRoute['action']])->name($postRoute['name']);
 }
