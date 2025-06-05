@@ -18,5 +18,6 @@ Route::get('/dashboard', function () {
 
 // Blog routing
 foreach (ArticleController::getRoutes() as $postRoute) {
-    Route::{$postRoute['method']}($postRoute['uri'], [ArticleController::class, $postRoute['action']])->name($postRoute['name']);
+    Route::{$postRoute['method']}($postRoute['uri'], [ArticleController::class, $postRoute['action']])
+        ->name($postRoute['name']);
 }
