@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 
-
+// Your main routes
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -21,3 +21,6 @@ foreach (ArticleController::getRoutes() as $postRoute) {
     Route::{$postRoute['method']}($postRoute['uri'], [ArticleController::class, $postRoute['action']])
         ->name($postRoute['name']);
 }
+
+// Load authentication routes (login, register, etc)
+require __DIR__ . '/auth.php';
